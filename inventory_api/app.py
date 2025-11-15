@@ -1,5 +1,5 @@
+from flask import Flask, request, jsonify
 from inventory_api.external_api import fetch_product_by_name
-from flask import Flask, jsonify
 
 app = Flask(__name__)
 
