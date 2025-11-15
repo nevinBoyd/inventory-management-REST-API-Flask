@@ -1,3 +1,4 @@
+from inventory_api.external_api import fetch_product_by_name
 from flask import Flask, jsonify
 
 app = Flask(__name__)
@@ -80,6 +81,30 @@ def delete_item(item_id):
 
     inventory = [i for i in inventory if i["id"] != item_id]
     return jsonify({"message": "Item deleted"}), 200
+
+# FETCH product from external API and add to inventory
+@app.route("/inventory/fetch/<string:name>", methods=["GET"])
+def fetch_and_add_product(name):
+    """
+    Fetch a product by name from the external OpenFoodFacts API
+    and add it to the local inventory database.
+    """
+    product_data = fetch_product_by_name(name)
+
+    if not product_data:
+        return jsonify({"error": "Product not found from external API"}), 404
+
+    new_id = max([i["id"] for i in inventory]) + 1 if inventory else 1
+
+    product_data.update({
+        "id": new_id,
+        "price": 0.0,
+        "quantity": 0,
+        "barcode": None,
+    })
+
+    inventory.append(product_data)
+    return jsonify(product_data), 201
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
