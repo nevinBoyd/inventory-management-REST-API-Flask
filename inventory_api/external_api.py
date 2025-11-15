@@ -7,7 +7,11 @@ def fetch_product_by_name(name):
     or None if no results or request error.
     """
     try:
+<<<<<<< HEAD
+        # Make reuquest to OpenFoodFacts product search
+=======
         # Make request to OpenFoodFacts product search
+>>>>>>> main
         response = requests.get(
             "https://world.openfoodfacts.org/cgi/search.pl",
             params={
@@ -19,7 +23,11 @@ def fetch_product_by_name(name):
         )
         data = response.json()
 
+<<<<<<< HEAD
+         # Validate results exist
+=======
         # Validate results exist
+>>>>>>> main
         if data.get("count", 0) > 0:
             product = data["products"][0]
 
